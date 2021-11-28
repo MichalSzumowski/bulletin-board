@@ -1,0 +1,41 @@
+@import '../../../styles/settings.scss';
+
+.root {
+  .postLink {
+    margin: ($base-size * 2) 0;
+    padding: ($base-size * 2) ($base-size * 3);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    color: $primary;
+    text-decoration: none;
+    border: 1px solid $primary;
+    border-radius: 5px;
+  }
+
+  .postImage {
+    width: 100px;
+    height: 100px;
+    margin-right: $base-size * 3;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .postInfo {
+    display: flex;
+    flex: auto;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+  }
+
+  &:hover {
+    background: lighten($secondary, 50%);
+    transition: $transition;
+  }
+}

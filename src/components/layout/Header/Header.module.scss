@@ -1,0 +1,38 @@
+@import '../../../styles/settings.scss';
+
+.root {
+    text-transform: uppercase;
+  
+    .toolbar {
+      justify-content: space-between;
+      background-color: $primary;
+  
+      .logo:hover {
+        color: $primary;
+        background: $white;
+        transition: $transition;
+      }
+  
+      .userStatus {
+        min-width: 150px;
+        margin: $base-size 0;
+        color: $white;
+      }
+
+      .userInput, .MenuItem {
+        color: $white;
+      }
+  
+      .postsButton {
+        min-width: 100px;
+      }
+  
+      .button:hover {
+        text-decoration: none;
+        color: $primary;
+        background: $white;
+        transition: $transition;
+        border: 1px solid $white;
+      }
+    }
+  }
