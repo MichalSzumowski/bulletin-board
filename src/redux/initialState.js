@@ -20,7 +20,7 @@ export const initialState = {
         text: 'Oferuję zdjęcia w prokuraturze - W dniu 25.12.2021 r. Cena do ustalenia, minimum 100 zł/godzinę + VAT',
         created: '2021-11-28',
         updated: '2021-11-28',
-        email: 'johnDoe@mail.com',
+        email: 'Michal@dev.pl',
         status: 'draft',
         image: 'https://images.pexels.com/photos/1112598/pexels-photo-1112598.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
         price: '100',
@@ -48,6 +48,6 @@ export const initialState = {
   },
   user: {
     status: 'logged-in',
-    email: '',
+    email: 'Michal@dev.pl',
   },
 };

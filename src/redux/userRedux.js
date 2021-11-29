@@ -1,5 +1,6 @@
 /* selectors */
 export const getUserStatus = ({ user }) => user.status;
+export const getUserEmail = ({ user }) => user.email;
 
 /* action name creator */
 const reducerName = 'user';

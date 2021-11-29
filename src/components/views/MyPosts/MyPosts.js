@@ -5,21 +5,22 @@ import clsx from 'clsx';
 
 import { connect } from 'react-redux';
 import { getAll } from '../../../redux/postsRedux';
-import { getUserStatus } from '../../../redux/userRedux';
+import { getUserStatus, getUserEmail } from '../../../redux/userRedux';
 
-import styles from './Homepage.module.scss';
+import styles from './MyPosts.module.scss';
+import { NotFound } from '../NotFound/NotFound';
 import { PostShort } from '../PostShort/PostShort';
 import { Button, Link } from '@material-ui/core';
 
-
-const Component = ({ className, posts, userStatus }) => (
+const Component = ({ className, posts, userStatus, userEmail }) => (
   <div className={clsx(className, styles.root)}>
-    <div className={styles.header}>
-      <h1>Post Table</h1>
-      <div>
-        {userStatus === 'not-logged-in'
-          ? ''
-          : <Button
+    {userStatus === 'not-logged-in'
+      ? <NotFound />
+      : 
+      <>
+        <div className={styles.header}>
+          <h1>My posts</h1>
+          <Button
             className={styles.button}
             component={Link}
             href='/post/add'
@@ -29,26 +30,29 @@ const Component = ({ className, posts, userStatus }) => (
           >
           + Add new post
           </Button>
-        }
-      </div>
-    </div>
-    
-    {posts
-      .map(post => (
-        <PostShort key={post.id} {...post} />
-      ))}
+        </div>
+
+        {posts
+          .filter(post => post.email === userEmail)
+          .map(post => (
+            <PostShort key={post.id} {...post} />
+          ))}
+      </>
+    }
   </div>
 );
 
 Component.propTypes = {
-  posts: PropTypes.array,
   className: PropTypes.string,
+  posts: PropTypes.array,
   userStatus: PropTypes.string,
+  userEmail: PropTypes.string,
 };
 
 const mapStateToProps = state => ({
   posts: getAll(state),
   userStatus: getUserStatus(state),
+  userEmail: getUserEmail(state),
 });
 
 // const mapDispatchToProps = dispatch => ({
@@ -58,6 +62,6 @@ const mapStateToProps = state => ({
 const Container = connect(mapStateToProps)(Component);
 
 export {
-  Container as Homepage,
-  Component as HomepageComponent,
+  Container as MyPosts,
+  Component as MyPostsComponent,
 };

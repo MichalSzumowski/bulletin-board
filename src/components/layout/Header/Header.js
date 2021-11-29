@@ -50,7 +50,7 @@ const Component = ({className, userStatus, changeUser}) => {
             ? <Button
               className={styles.button + ' ' + styles.postsButton}
               component={NavLink}
-              to='/'
+              to='/my-posts'
               variant="outlined"
               color="inherit"
               size="large"

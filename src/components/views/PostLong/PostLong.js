@@ -4,17 +4,17 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 
 import { connect } from 'react-redux';
-import { getUserStatus } from '../../../redux/userRedux';
+import { getUserStatus, getUserEmail } from '../../../redux/userRedux';
 import { Button, Link } from '@material-ui/core';
 
 import styles from './PostLong.module.scss';
 
-const Component = ({ className, userStatus, id, title, text, created, updated, email, status, image, price, phone, location }) => (
+const Component = ({ className, userStatus, userEmail, id, title, text, created, updated, email, status, image, price, phone, location }) => (
   <div className={clsx(className, styles.root)}>
     <div className={styles.header}>
       <h1>{title}</h1>
 
-      {userStatus === 'not-logged-in'
+      {userStatus === 'not-logged-in' || userEmail !== email
         ? ''
         : <Button
           className={styles.button}
@@ -65,6 +65,7 @@ const Component = ({ className, userStatus, id, title, text, created, updated, e
 Component.propTypes = {
   className: PropTypes.string,
   userStatus: PropTypes.string,
+  userEmail: PropTypes.string,
   id: PropTypes.string,
   title: PropTypes.string,
   text: PropTypes.string,
@@ -73,13 +74,14 @@ Component.propTypes = {
   email: PropTypes.string,
   status: PropTypes.string,
   image: PropTypes.string,
-  price: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  price: PropTypes.number,
   phone: PropTypes.string,
   location: PropTypes.string,
 };
 
 const mapStateToProps = state => ({
   userStatus: getUserStatus(state),
+  userEmail: getUserEmail(state),
 });
 
 // const mapDispatchToProps = dispatch => ({
