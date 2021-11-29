@@ -50,12 +50,23 @@ const Component = ({ className, editPost, id, title, text, status, price, phone,
   const handleSubmit = event => {
     event.preventDefault();
     
-    editPost({
-      ...editedPost,
-      updated: currentDate(),
-    });
-    alert('Post successfully updated!');
-    history.push('/');
+    if (!editedPost.title || !editedPost.text || !editedPost.status) {
+      alert('Please fill all required fields.');
+    } else if (editedPost.title.length < 10) {
+      alert('Your title is too short!');
+    } else if (editedPost.text.length < 20) {
+      alert('Your description is too short!');
+    } else {
+
+      editPost({
+        ...editedPost,
+
+        updated: currentDate(),
+      });
+
+      alert('Post added successfully!');
+      history.push('/');
+    }
   };
 
   return ( 

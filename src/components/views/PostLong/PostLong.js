@@ -14,7 +14,7 @@ const Component = ({ className, userStatus, userEmail, id, title, text, created,
     <div className={styles.header}>
       <h1>{title}</h1>
 
-      {userStatus === 'admin' || userStatus==='logged-in' && userEmail === email
+      {userStatus === 'admin' || (userStatus==='logged-in' && userEmail === email)
         ? <Button
           className={styles.button}
           component={Link}

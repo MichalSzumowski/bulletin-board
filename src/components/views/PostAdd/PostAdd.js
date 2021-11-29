@@ -14,10 +14,10 @@ import { currentDate, randomId } from '../../../utils/utils';
 
 import { useHistory } from 'react-router-dom';
 
-const Component = ({className, userStatus, userEmail, addPost}) => {
+const Component = ({className, userStatus, userEmail, addPost, title}) => {
 
   const [newPost, setNewPost] = useState({
-    title: '',
+    title: title,
     text: '',
     price: '',
     phone: '',
@@ -47,58 +47,29 @@ const Component = ({className, userStatus, userEmail, addPost}) => {
 
   const handleSubmit = event => {
     event.preventDefault();
+    console.log(newPost);
     
-    addPost({
-      ...newPost,
-      id: randomId(8),
-      email: userEmail,
-      created: currentDate(),
-      updated: currentDate(),
-    });
-
-    setNewPost({
-      title: '',
-      text: '',
-      price: '',
-      phone: '',
-      location: '',
-      status: 'draft',
-      image: '',
-      imageName: '',
-    });
-
-    alert('Post added successfully!');
-    history.push('/');
-  };
-  /*
-  const handleSubmit = event => {
-    event.preventDefault();
-    if (newPost.title && newPost.content && newPost.status) {
-      if (newPost.title.length > 10) {
-        if (newPost.content.length > 20) {
-          addPost(newPost);
-          setNewPost({
-            title: '',
-            content: '',
-            status: '',
-            image: '',
-            price: '',
-            phone: '',
-            city: '',
-            imageName: '',
-          });
-          alert('Post added successfully!');
-        } else {
-          alert('Your description is too short!');
-        }
-      } else {
-        alert('Your title is too short!');
-      }
+    if (!newPost.title || !newPost.text) {
+      alert('Please fill all required fields.');
+    } else if (newPost.title.length < 10) {
+      alert('Your title is too short!');
+    } else if (newPost.text.length < 20) {
+      alert('Your description is too short!');
     } else {
-      alert('Please fill in all required fields.');
+
+      addPost({
+        ...newPost,
+        id: randomId(8),
+        email: userEmail,
+        created: currentDate(),
+        updated: currentDate(),
+      });
+
+      alert('Post added successfully!');
+      history.push('/');
     }
-  };*/
-  
+  };
+
   return (
     <div className={clsx(className, styles.root)}>
       {userStatus === 'not-logged-in'
@@ -230,6 +201,19 @@ Component.propTypes = {
   userStatus: PropTypes.string,
   userEmail: PropTypes.string,
   addPost: PropTypes.func,
+
+  id: PropTypes.string,
+  title: PropTypes.string,
+  text: PropTypes.string,
+  email: PropTypes.string,
+  status: PropTypes.string,
+  image: PropTypes.string,
+  price: PropTypes.number,
+  phone: PropTypes.number,
+  location: PropTypes.string,
+  imageName: PropTypes.string,
+  created: PropTypes.string,
+  updated: PropTypes.string,
 };
 
 const mapStateToProps = state => ({

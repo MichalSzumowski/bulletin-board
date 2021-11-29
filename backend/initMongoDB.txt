@@ -1,0 +1,33 @@
+show dbs
+
+use bulletinBoard
+
+db.createCollection('posts')
+
+show collections
+
+db.posts.insertMany([{
+  author: 'the.admin@example.com',
+  created: new Date('2019-01-01T12:00:00Z'),
+  updated: new Date('2019-01-01T12:00:00Z'),
+  status: 'published',
+  title: 'Welcome to our bulletin board!',
+  text: 'Email me to register and get an account!',
+  photo: null,
+  price: null,
+  phone: null,
+  location: null
+}, {
+  author: 'user123@example.com',
+  created: new Date('2019-01-05T16:35:17Z'),
+  updated: new Date('2019-01-05T16:35:17Z'),
+  status: 'published',
+  title: 'Room for rent',
+  text: 'I have a spare room for rent. Low price!',
+  photo: null,
+  price: null,
+  phone: null,
+  location: null
+}])
+
+db.posts.find().pretty()

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 
 import { connect } from 'react-redux';
-import { getAll } from '../../../redux/postsRedux';
+import { getAll, fetchPosts } from '../../../redux/postsRedux';
 
 import styles from './Post.module.scss';
 import { PostLong } from '../PostLong/PostLong';
@@ -29,17 +29,19 @@ Component.propTypes = {
   className: PropTypes.string,
   posts: PropTypes.array,
   match: PropTypes.object,
+
+  fetchPosts: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
   posts: getAll(state),
 });
 
-// const mapDispatchToProps = dispatch => ({
-//   someAction: arg => dispatch(reduxActionCreator(arg)),
-// });
+const mapDispatchToProps = dispatch => ({
+  fetchPosts: () => dispatch(fetchPosts()),
+});
 
-const Container = connect(mapStateToProps)(Component);
+const Container = connect(mapStateToProps, mapDispatchToProps)(Component);
 
 export {
   Container as Post,
