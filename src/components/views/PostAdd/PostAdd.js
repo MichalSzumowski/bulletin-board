@@ -4,23 +4,100 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 
 import { connect } from 'react-redux';
-import { getUserStatus } from '../../../redux/userRedux';
+import { getUserStatus, getUserEmail } from '../../../redux/userRedux';
+import { addPost } from '../../../redux/postsRedux';
 
 import styles from './PostAdd.module.scss';
 import { NotFound } from '../NotFound/NotFound';
 import { TextField, FormControl, InputLabel, Select, MenuItem, Button } from '@material-ui/core';
+import { currentDate, randomId } from '../../../utils/utils';
 
-const Component = ({className, userStatus}) => {
+import { useHistory } from 'react-router-dom';
 
-  const [status, setStatus] = useState('');
-  const handleStatus = event => {
-    setStatus(event.target.value);
+const Component = ({className, userStatus, userEmail, addPost}) => {
+
+  const [newPost, setNewPost] = useState({
+    title: '',
+    text: '',
+    price: '',
+    phone: '',
+    location: '',
+    status: 'draft',
+    image: '',
+    imageName: '',
+  });
+
+  const handleNewPost = event => {
+    if (event.target.name === 'image') {
+      const image = event.target.files[0];
+      setNewPost({ 
+        ...newPost, 
+        image: event.target.value, 
+        imageName: image.name,
+      });
+    } else {
+      setNewPost({ 
+        ...newPost, 
+        [event.target.name]: event.target.value, 
+      });
+    }
   };
 
-  const [image, setImage] = useState(null);
-  const handleImage = ({ target }) => {
-    setImage(target.files[0]);
+  const history = useHistory();
+
+  const handleSubmit = event => {
+    event.preventDefault();
+    
+    addPost({
+      ...newPost,
+      id: randomId(8),
+      email: userEmail,
+      created: currentDate(),
+      updated: currentDate(),
+    });
+
+    setNewPost({
+      title: '',
+      text: '',
+      price: '',
+      phone: '',
+      location: '',
+      status: 'draft',
+      image: '',
+      imageName: '',
+    });
+
+    alert('Post added successfully!');
+    history.push('/');
   };
+  /*
+  const handleSubmit = event => {
+    event.preventDefault();
+    if (newPost.title && newPost.content && newPost.status) {
+      if (newPost.title.length > 10) {
+        if (newPost.content.length > 20) {
+          addPost(newPost);
+          setNewPost({
+            title: '',
+            content: '',
+            status: '',
+            image: '',
+            price: '',
+            phone: '',
+            city: '',
+            imageName: '',
+          });
+          alert('Post added successfully!');
+        } else {
+          alert('Your description is too short!');
+        }
+      } else {
+        alert('Your title is too short!');
+      }
+    } else {
+      alert('Please fill in all required fields.');
+    }
+  };*/
   
   return (
     <div className={clsx(className, styles.root)}>
@@ -28,7 +105,7 @@ const Component = ({className, userStatus}) => {
         ? <NotFound />
         :         
         <><h1>New Post</h1>
-          <form className={styles.form}>
+          <form className={styles.form} onSubmit={handleSubmit}>
             <TextField
               id='post-title'
               className={styles.formInput}
@@ -39,6 +116,9 @@ const Component = ({className, userStatus}) => {
                 minLength: 10,
                 maxLength: 30,
               }}
+              name='title'
+              value={newPost.title}
+              onChange={handleNewPost}
             />
             <TextField
               id='post-description'
@@ -51,6 +131,9 @@ const Component = ({className, userStatus}) => {
                 minLength: 20,
                 maxLength: 5000,
               }}
+              name='text'
+              value={newPost.text}
+              onChange={handleNewPost}
             />
             <TextField
               id='post-price'
@@ -63,18 +146,9 @@ const Component = ({className, userStatus}) => {
                 min: 1,
                 max: 999999,
               }}
-            />
-            <TextField
-              id='post-email'
-              className={styles.formInput}
-              label='E-mail'
-              variant='outlined'
-              type='email'
-              required
-              inputProps={{
-                minLength: 6,
-                maxLength: 100,
-              }}
+              name='price'
+              value={newPost.price}
+              onChange={handleNewPost}
             />
             <TextField
               id='post-phone'
@@ -86,6 +160,9 @@ const Component = ({className, userStatus}) => {
                 minLength: 9,
                 maxLength: 20,
               }}
+              name='phone'
+              value={newPost.phone}
+              onChange={handleNewPost}
             />
             <TextField
               id='post-location'
@@ -96,6 +173,9 @@ const Component = ({className, userStatus}) => {
                 minLength: 3,
                 maxLength: 30,
               }}
+              name='location'
+              value={newPost.location}
+              onChange={handleNewPost}
             />
 
             <FormControl variant='outlined' className={styles.formInput} required>
@@ -103,8 +183,9 @@ const Component = ({className, userStatus}) => {
               <Select
                 labelId='post-status-label'
                 id='post-status'
-                value={status}
-                onChange={handleStatus}
+                name='status'
+                value={newPost.status}
+                onChange={handleNewPost}
                 label='Status'
               >
                 <MenuItem value={'draft'}>Draft</MenuItem>
@@ -112,18 +193,19 @@ const Component = ({className, userStatus}) => {
                 <MenuItem value={'closed'}>Closed</MenuItem>
               </Select>
             </FormControl>
-
+            
             <label htmlFor='post-image'>
-              <Button className={styles.formInput + ' ' + styles.formUpload} variant='outlined' component='span'>
+              <Button className={styles.formInput + ' ' + styles.formButton} variant='outlined' component='span'>
                 <input
                   accept='image/*'
                   id='post-image'
+                  name='image'
                   type='file'
-                  onChange={handleImage}
+                  value={newPost.image}
+                  onChange={handleNewPost}
                   hidden
-                  fullWidth
                 />
-                {image ? `Uploaded: ${image.name}` : 'Upload image'}
+                {newPost.image.length > 0 ? `Uploaded: ${newPost.imageName}` : 'Upload image'}
               </Button>
             </label>
 
@@ -146,17 +228,20 @@ const Component = ({className, userStatus}) => {
 Component.propTypes = {
   className: PropTypes.string,
   userStatus: PropTypes.string,
+  userEmail: PropTypes.string,
+  addPost: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
   userStatus: getUserStatus(state),
+  userEmail: getUserEmail(state),
 });
 
-// const mapDispatchToProps = dispatch => ({
-//   someAction: arg => dispatch(reduxActionCreator(arg)),
-// });
+const mapDispatchToProps = dispatch => ({
+  addPost: newPost => dispatch(addPost(newPost)),
+});
 
-const Container = connect(mapStateToProps)(Component);
+const Container = connect(mapStateToProps, mapDispatchToProps)(Component);
 
 export {
   Container as PostAdd,

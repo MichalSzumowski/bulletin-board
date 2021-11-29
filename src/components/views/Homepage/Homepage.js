@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import clsx from 'clsx';
@@ -11,8 +11,8 @@ import styles from './Homepage.module.scss';
 import { PostShort } from '../PostShort/PostShort';
 import { Button, Link } from '@material-ui/core';
 
-
 const Component = ({ className, posts, userStatus }) => (
+
   <div className={clsx(className, styles.root)}>
     <div className={styles.header}>
       <h1>Post Table</h1>
@@ -33,12 +33,12 @@ const Component = ({ className, posts, userStatus }) => (
       </div>
     </div>
     
-    {posts
-      .map(post => (
-        <PostShort key={post.id} {...post} />
-      ))}
+    {posts && posts.map(post => (
+      <PostShort key={post.id} {...post} />
+    ))}
   </div>
 );
+
 
 Component.propTypes = {
   posts: PropTypes.array,

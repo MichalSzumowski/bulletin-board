@@ -14,18 +14,17 @@ const Component = ({ className, userStatus, userEmail, id, title, text, created,
     <div className={styles.header}>
       <h1>{title}</h1>
 
-      {userStatus === 'not-logged-in' || userEmail !== email
-        ? ''
-        : <Button
+      {userStatus === 'admin' || userStatus==='logged-in' && userEmail === email
+        ? <Button
           className={styles.button}
           component={Link}
           href={`/post/${id}/edit`}
           variant="outlined"
           color="inherit"
-          size="large"
         >
           Edit post
         </Button>
+        : ''
       }
     </div>
 
@@ -75,7 +74,7 @@ Component.propTypes = {
   status: PropTypes.string,
   image: PropTypes.string,
   price: PropTypes.number,
-  phone: PropTypes.string,
+  phone: PropTypes.number,
   location: PropTypes.string,
 };
 

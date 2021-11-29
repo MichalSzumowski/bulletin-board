@@ -109,4 +109,19 @@
       }
     }
   }
+
+  @media (max-width: 991px) {
+    .post,
+    .header {
+      flex-direction: column;
+
+      .postText {
+        margin: ($base-size * 2) 0;
+      }
+
+      h1 {
+        margin: $base-size auto;
+      }
+    }
+  }
 }

@@ -10,7 +10,9 @@ import styles from './Header.module.scss';
 import { NavLink } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Button, Link, FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
 
+
 const Component = ({className, userStatus, changeUser}) => {
+
   return (
     <div className={clsx(className, styles.root)}>
       <AppBar position="static">
@@ -40,36 +42,49 @@ const Component = ({className, userStatus, changeUser}) => {
               value={userStatus}
               onChange={event => changeUser(event.target.value)}
             >
-              <MenuItem value={'logged-in'}>Logged</MenuItem>
-              <MenuItem value={'not-logged-in'}>Unlogged</MenuItem>
+              <MenuItem value={'logged-in'}>Logged In</MenuItem>
+              <MenuItem value={'not-logged-in'}>Logged Off</MenuItem>
               <MenuItem value={'admin'}>Admin</MenuItem>
             </Select>
           </FormControl>
 
-          {userStatus === 'logged-in'
-            ? <Button
-              className={styles.button + ' ' + styles.postsButton}
-              component={NavLink}
-              to='/my-posts'
+          {userStatus !== 'not-logged-in'
+            ? <>
+              <Button
+                className={styles.button + ' ' + styles.postsButton}
+                component={NavLink}
+                to='/my-posts'
+                variant="outlined"
+                color="inherit"
+                size="large"
+              >
+              My posts
+              </Button>
+
+              <Button
+                className={styles.button + ' ' + styles.loginButton}
+                component={NavLink}
+                to='/'
+                variant="outlined"
+                color="inherit"
+                size="large"
+                onClick={() => changeUser('not-logged-in')}
+              >
+            Sign out
+              </Button>
+            </>
+            : 
+            <Button
+              className={styles.button + ' ' + styles.loginButton}
+              component={Link}
+              href='https://google.com'
               variant="outlined"
               color="inherit"
               size="large"
             >
-              My posts
+            Sign in
             </Button>
-            : ''
           }
-
-          <Button
-            className={styles.button}
-            component={Link}
-            href='https://google.com'
-            variant="outlined"
-            color="inherit"
-            size="large"
-          >
-            {userStatus === 'not-logged-in' ? 'Sign in' : 'Sign out'}
-          </Button>
         </Toolbar>
       </AppBar>
     </div>

@@ -38,4 +38,17 @@
     background: lighten($secondary, 50%);
     transition: $transition;
   }
+
+  @media (max-width: 767px) {
+    .postLink {
+      flex-direction: column;
+    }
+
+    .postImage, .postInfo {
+      margin: auto;
+      text-align: center;
+      justify-content: center;
+    }
+
+  }
 }

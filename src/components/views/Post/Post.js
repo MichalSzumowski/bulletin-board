@@ -8,16 +8,21 @@ import { getAll } from '../../../redux/postsRedux';
 
 import styles from './Post.module.scss';
 import { PostLong } from '../PostLong/PostLong';
+import { NotFound } from '../NotFound/NotFound';
 
-const Component = ({ className, posts, ...props }) => (
-  <div className={clsx(className, styles.root)}>
-    {posts.map(post => (
-      post.id !== props.match.params.id
-        ? console.log(post.id, props.match.params.id)
-        : <PostLong key={post.id} {...post} />
-    ))}
-  </div>
-);
+const Component = ({ className, posts, ...props }) => {
+  
+  const properPost = posts.filter(post => post.id === props.match.params.id);
+  console.log(properPost);
+  return (
+    <div className={clsx(className, styles.root)}>
+      {properPost.length > 0
+        ? <PostLong key={properPost[0].id} {...properPost[0]} />
+        : <NotFound />
+      }
+    </div>
+  );
+};
 
 Component.propTypes = {
   children: PropTypes.node,
