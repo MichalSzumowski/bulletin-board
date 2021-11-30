@@ -7,12 +7,14 @@ import { connect } from 'react-redux';
 import { getAll, fetchPosts } from '../../../redux/postsRedux';
 import { getUserStatus } from '../../../redux/userRedux';
 
-import styles from './Homepage.module.scss';
-import { PostShort } from '../PostShort/PostShort';
 import { Button, Link } from '@material-ui/core';
 
+import { PostShort } from '../../features/PostShort/PostShort';
+
+import styles from './Homepage.module.scss';
+
 const Component = ({ className, posts, userStatus, fetchPosts }) => {
-  
+
   useEffect(() => {
     fetchPosts();
   }, [fetchPosts] );
@@ -20,8 +22,8 @@ const Component = ({ className, posts, userStatus, fetchPosts }) => {
   return (
     <div className={clsx(className, styles.root)}>
       <div className={styles.header}>
-        <h1>Post Table</h1>
-        
+        <h1>Latest posts</h1>
+
         {userStatus === 'not-logged-in'
           ? ''
           : <Button
@@ -36,10 +38,10 @@ const Component = ({ className, posts, userStatus, fetchPosts }) => {
           </Button>
         }
       </div>
-    
+
       {posts
         .sort((a, b) => (
-          new Date(b.updated) - new Date(a.updated)
+          new Date(b.lastUpdate) - new Date(a.lastUpdate)
         ))
         .map(post => (
           <PostShort key={post._id} {...post} />
@@ -50,10 +52,9 @@ const Component = ({ className, posts, userStatus, fetchPosts }) => {
 };
 
 Component.propTypes = {
-  posts: PropTypes.array,
   className: PropTypes.string,
+  posts: PropTypes.array,
   userStatus: PropTypes.string,
-
   fetchPosts: PropTypes.func,
 };
 

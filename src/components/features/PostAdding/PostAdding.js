@@ -1,44 +1,43 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import clsx from 'clsx';
 
 import { connect } from 'react-redux';
-import { editPost } from '../../../redux/postsRedux';
+import { addNewPost } from '../../../redux/postsRedux';
+import { getUserEmail } from '../../../redux/userRedux';
 
-import styles from './PostEditing.module.scss';
+import { TextField, FormControl, InputLabel, Select, MenuItem, Button, OutlinedInput, InputAdornment } from '@material-ui/core';
 
-import { TextField, FormControl, InputLabel, Select, MenuItem, Button } from '@material-ui/core';
-import { currentDate } from '../../../utils/utils';
-import { useHistory } from 'react-router-dom';
+import { currentDate } from '../../../utils/CurrentDate';
 
-const Component = ({ className, editPost, _id, title, text, status, price, phone, location, created, updated, image, imageName }) => { 
-  
-  const [editedPost, setEditedPost] = useState({
-    id: _id,
-    title: title,
-    text: text,
-    price: price,
-    phone: phone,
-    location: location,
-    status: status,
+import styles from './PostAdding.module.scss';
+
+const Component = ({ className, userEmail, addPost }) => {
+
+  const [newPost, setNewPost] = useState({
+    title: '',
+    content: '',
+    status: 'draft',
     image: '',
-    imageName: imageName,
-    created: created,
-    updated: updated,
+    price: '',
+    phone: '',
+    city: '',
+    imageName: '',
   });
 
-  const handleEditedPost = event => {
-    if (event.target.name === 'image') {
+  const handleNewPost = event => {
+    if(event.target.name === 'image') {
       const image = event.target.files[0];
-      setEditedPost({
-        ...editedPost,
-        image: event.target.value,
+      setNewPost({
+        ...newPost,
+        image: image,
         imageName: image.name,
       });
     } else {
-      setEditedPost({
-        ...editedPost,
+      setNewPost({
+        ...newPost,
         [event.target.name]: event.target.value,
       });
     }
@@ -48,57 +47,70 @@ const Component = ({ className, editPost, _id, title, text, status, price, phone
 
   const handleSubmit = event => {
     event.preventDefault();
-    
-    if (!editedPost.title || !editedPost.text || !editedPost.status) {
-      alert('Please fill all required fields.');
-    } else if (editedPost.title.length < 10) {
+
+    if(!newPost.title || !newPost.content || !newPost.status) {
+      alert('Please fill all of the necessary fields!');
+    } else if(newPost.title.length < 10) {
       alert('Your title is too short!');
-    } else if (editedPost.text.length < 20) {
+    } else if(newPost.content.length < 20) {
       alert('Your description is too short!');
     } else {
       const date = new Date(Date.now());
-      editPost({
-        ...editedPost,
-        updated: currentDate(date),
+      addPost({
+        ...newPost,
+        email: userEmail,
+        date: currentDate(date),
+        lastUpdate: currentDate(date),
       });
-
-      alert('Post added successfully!');
+      setNewPost({
+        title: '',
+        content: '',
+        status: 'draft',
+        image: '',
+        price: '',
+        phone: '',
+        city: '',
+        imageName: '',
+      });
+      alert('Post successfully added!');
       history.push('/');
     }
   };
 
-  return ( 
+  return (
     <div className={clsx(className, styles.root)}>
-      <h1>Edit Your Post</h1>
+      <h1>Adding new post</h1>
+
       <form className={styles.form} onSubmit={handleSubmit}>
         <TextField
           id='post-title'
+          name='title'
           className={styles.formInput}
           label='Title'
           variant='outlined'
+          value={newPost.title}
+          onChange={handleNewPost}
           required
           inputProps={{
             minLength: 10,
             maxLength: 30,
           }}
-          value={editedPost.title}
-          onChange={handleEditedPost}
-          name='title'
         />
         <TextField
           id='post-description'
+          name='content'
           className={styles.formInput}
           label='Description'
           variant='outlined'
-          required
+          value={newPost.content}
+          onChange={handleNewPost}
           multiline
+          rows='10'
+          required
           inputProps={{
             minLength: 20,
             maxLength: 5000,
           }}
-          value={editedPost.text}
-          onChange={handleEditedPost}
-          name='text'
         />
         <TextField
           id='post-price'
@@ -109,38 +121,38 @@ const Component = ({ className, editPost, _id, title, text, status, price, phone
           required
           inputProps={{
             min: 1,
-            max: 999999,
+            max: 999999999,
           }}
-          value={editedPost.price}
-          onChange={handleEditedPost}
           name='price'
+          value={newPost.price}
+          onChange={handleNewPost}
         />
         <TextField
           id='post-phone'
-          type='tel'
+          type='number'
+          name='phone'
           className={styles.formInput}
           label='Phone'
           variant='outlined'
+          value={newPost.phone}
+          onChange={handleNewPost}
           inputProps={{
             minLength: 9,
             maxLength: 20,
           }}
-          value={editedPost.phone}
-          onChange={handleEditedPost}
-          name='phone'
         />
         <TextField
           id='post-location'
+          name='city'
           className={styles.formInput}
           label='Location'
           variant='outlined'
+          value={newPost.city}
+          onChange={handleNewPost}
           inputProps={{
             minLength: 3,
             maxLength: 30,
           }}
-          value={editedPost.location}
-          onChange={handleEditedPost}
-          name='location'
         />
 
         <FormControl variant='outlined' className={styles.formInput} required>
@@ -148,10 +160,10 @@ const Component = ({ className, editPost, _id, title, text, status, price, phone
           <Select
             labelId='post-status-label'
             id='post-status'
-            label='Status'
-            value={editedPost.status}
-            onChange={handleEditedPost}
             name='status'
+            value={newPost.status}
+            onChange={handleNewPost}
+            label='Status'
           >
             <MenuItem value={'draft'}>Draft</MenuItem>
             <MenuItem value={'published'}>Published</MenuItem>
@@ -160,63 +172,50 @@ const Component = ({ className, editPost, _id, title, text, status, price, phone
         </FormControl>
 
         <label htmlFor='post-image'>
-          <Button className={styles.formInput + ' ' + styles.formUpload} variant='outlined' component='span'>
+          <Button className={styles.formInput + ' ' + styles.formButton} variant='outlined' component='span'>
             <input
               accept='image/*'
               id='post-image'
-              type='file'
-              hidden
-              fullWidth
-              value={editedPost.image}
-              onChange={handleEditedPost}
               name='image'
+              type='file'
+              onChange={handleNewPost}
+              hidden
             />
-            {editedPost.image.length > 0 ? `Uploaded: ${editedPost.imageName}` : 'Upload image'}
+            {newPost.image ? `Uploaded: ${newPost.imageName}` : 'Upload image'}
           </Button>
+          <img id='image-preview' className={styles.imagePreview} src='' alt='' />
         </label>
 
         <Button
           className={styles.formInput + ' ' + styles.formSubmit}
           type='submit'
           variant='outlined'
-          fullWidth
+          size='large'
         >
-        Add edited Post
+          Publish!
         </Button>
       </form>
     </div>
-  ); 
+  );
 };
 
 Component.propTypes = {
   className: PropTypes.string,
-  editPost: PropTypes.func,
-
-  _id: PropTypes.string,
-  title: PropTypes.string,
-  text: PropTypes.string,
-  email: PropTypes.string,
-  status: PropTypes.string,
-  image: PropTypes.string,
-  price: PropTypes.number,
-  phone: PropTypes.number,
-  location: PropTypes.string,
-  imageName: PropTypes.string,
-  created: PropTypes.string,
-  updated: PropTypes.string,
+  userEmail: PropTypes.string,
+  addPost: PropTypes.func,
 };
-  
-// const mapStateToProps = state => ({
-//   someProp: reduxSelector(state),
-// });
-  
-const mapDispatchToProps = dispatch => ({
-  editPost: editedPost => dispatch(editPost(editedPost)),
+
+const mapStateToProps = state => ({
+  userEmail: getUserEmail(state),
 });
 
-const Container = connect(null, mapDispatchToProps)(Component);
-  
+const mapDispatchToProps = dispatch => ({
+  addPost: newPost => dispatch(addNewPost(newPost)),
+});
+
+const Container = connect(mapStateToProps, mapDispatchToProps)(Component);
+
 export {
-  Container as PostEditing,
-  Component as PostEditingComponent,
+  Container as PostAdding,
+  Component as PostAddingComponent,
 };

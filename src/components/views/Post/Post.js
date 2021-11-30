@@ -6,19 +6,20 @@ import clsx from 'clsx';
 import { connect } from 'react-redux';
 import { getSingle, fetchSinglePost } from '../../../redux/postsRedux';
 
-import styles from './Post.module.scss';
-import { PostLong } from '../PostLong/PostLong';
 import { NotFound } from '../NotFound/NotFound';
+import { PostLong } from '../../features/PostLong/PostLong';
 
-const Component = ({ className, post, fetchSinglePost, ...props }) => {
-  
+import styles from './Post.module.scss';
+
+const Component = ({className, post, fetchSinglePost, ...props}) => {
+
   useEffect(() => {
     fetchSinglePost(props.match.params.id);
   }, [props.match.params.id, fetchSinglePost] );
 
   return (
     <div className={clsx(className, styles.root)}>
-      {post 
+      {post
         ? <PostLong key={post._id} {...post} />
         : <NotFound />
       }
@@ -27,14 +28,13 @@ const Component = ({ className, post, fetchSinglePost, ...props }) => {
 };
 
 Component.propTypes = {
-  children: PropTypes.node,
   className: PropTypes.string,
   post: PropTypes.object,
-  match: PropTypes.object,
   fetchSinglePost: PropTypes.func,
+  match: PropTypes.object,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, props) => ({
   post: getSingle(state),
 });
 
@@ -47,4 +47,4 @@ const Container = connect(mapStateToProps, mapDispatchToProps)(Component);
 export {
   Container as Post,
   Component as PostComponent,
-}; 
+};

@@ -4,25 +4,25 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 
 import { connect } from 'react-redux';
-import { getUserStatus, getUserEmail } from '../../../redux/userRedux';
 import { getAll } from '../../../redux/postsRedux';
+import { getUserStatus, getUserEmail } from '../../../redux/userRedux';
+
+import { PostEditing } from '../../features/PostEditing/PostEditing';
+import { NotFound } from '../NotFound/NotFound';
 
 import styles from './PostEdit.module.scss';
-import { NotFound } from '../NotFound/NotFound';
-import { PostEditing } from '../PostEditing/PostEditing';
 
+const Component = ({ className, userStatus, userEmail, posts, ...props }) => {
 
-const Component = ({className, userStatus, userEmail, posts, ...props}) => {
-  
   const properPost = posts.filter(post => post._id === props.match.params.id);
-  
+
   return (
     <div className={clsx(className, styles.root)}>
-      {properPost.length > 0 
-        && userStatus === 'admin'
-        || (userStatus === 'logged-in' && userEmail === properPost[0].email)
-        ? <PostEditing key={properPost[0]._id} {...properPost[0]} />
-        : <NotFound />  
+      {properPost.length > 0
+        ? userStatus === 'not-logged-in' || (userStatus === 'logged-in' && userEmail !== properPost[0].email)
+          ? <NotFound />
+          : <PostEditing key={properPost[0]._id} {...properPost[0]} />
+        : <NotFound />
       }
     </div>
   );
@@ -37,19 +37,14 @@ Component.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  userStatus: getUserStatus(state),
   posts: getAll(state),
+  userStatus: getUserStatus(state),
   userEmail: getUserEmail(state),
 });
-
-// const mapDispatchToProps = dispatch => ({
-//   someAction: arg => dispatch(reduxActionCreator(arg)),
-// });
 
 const Container = connect(mapStateToProps)(Component);
 
 export {
-  // Component as PostEdit,
   Container as PostEdit,
   Component as PostEditComponent,
 };

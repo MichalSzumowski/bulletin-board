@@ -7,17 +7,18 @@ import { connect } from 'react-redux';
 import { getAll } from '../../../redux/postsRedux';
 import { getUserStatus, getUserEmail } from '../../../redux/userRedux';
 
-import styles from './MyPosts.module.scss';
-import { NotFound } from '../NotFound/NotFound';
-import { PostShort } from '../PostShort/PostShort';
 import { Button, Link } from '@material-ui/core';
 
-const Component = ({ className, posts, userStatus, userEmail }) => (
+import { NotFound } from '../NotFound/NotFound';
+import { PostShort } from '../../features/PostShort/PostShort';
+
+import styles from './MyPosts.module.scss';
+
+const Component = ({className, posts, userStatus, userEmail}) => (
   <div className={clsx(className, styles.root)}>
     {userStatus === 'not-logged-in'
       ? <NotFound />
-      : 
-      <>
+      : <>
         <div className={styles.header}>
           <h1>My posts</h1>
           <Button
@@ -35,11 +36,12 @@ const Component = ({ className, posts, userStatus, userEmail }) => (
         {posts
           .filter(post => post.email === userEmail)
           .sort((a, b) => (
-            new Date(b.updated) - new Date(a.updated)
+            new Date(b.lastUpdate) - new Date(a.lastUpdate)
           ))
           .map(post => (
             <PostShort key={post._id} {...post} />
-          ))}
+          ))
+        }
       </>
     }
   </div>
