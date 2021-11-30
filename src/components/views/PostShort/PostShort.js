@@ -9,9 +9,9 @@ import clsx from 'clsx';
 import styles from './PostShort.module.scss';
 import { Link } from '@material-ui/core';
 
-const Component = ({ id, className, title, image, price }) => (
+const Component = ({ _id, className, title, image, price }) => (
   <div className={clsx(className, styles.root)}>
-    <Link className={styles.postLink} href={`/post/${id}`} >
+    <Link className={styles.postLink} href={`/post/${_id}`} >
       <div className={styles.postImage}>
         {image === ''
           ? '' 
@@ -27,7 +27,7 @@ const Component = ({ id, className, title, image, price }) => (
 );
 
 Component.propTypes = {
-  id: PropTypes.string,
+  _id: PropTypes.string,
   className: PropTypes.string,
   title: PropTypes.string,
   image: PropTypes.string,

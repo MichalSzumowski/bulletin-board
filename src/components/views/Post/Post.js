@@ -1,23 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import clsx from 'clsx';
 
 import { connect } from 'react-redux';
-import { getAll, fetchPosts } from '../../../redux/postsRedux';
+import { getSingle, fetchSinglePost } from '../../../redux/postsRedux';
 
 import styles from './Post.module.scss';
 import { PostLong } from '../PostLong/PostLong';
 import { NotFound } from '../NotFound/NotFound';
 
-const Component = ({ className, posts, ...props }) => {
+const Component = ({ className, post, fetchSinglePost, ...props }) => {
   
-  const properPost = posts.filter(post => post.id === props.match.params.id);
-  console.log(properPost);
+  useEffect(() => {
+    fetchSinglePost(props.match.params.id);
+  }, [props.match.params.id, fetchSinglePost] );
+
   return (
     <div className={clsx(className, styles.root)}>
-      {properPost.length > 0
-        ? <PostLong key={properPost[0].id} {...properPost[0]} />
+      {post 
+        ? <PostLong key={post._id} {...post} />
         : <NotFound />
       }
     </div>
@@ -27,18 +29,17 @@ const Component = ({ className, posts, ...props }) => {
 Component.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
-  posts: PropTypes.array,
+  post: PropTypes.object,
   match: PropTypes.object,
-
-  fetchPosts: PropTypes.func,
+  fetchSinglePost: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
-  posts: getAll(state),
+  post: getSingle(state),
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchPosts: () => dispatch(fetchPosts()),
+  fetchSinglePost: id => dispatch(fetchSinglePost(id)),
 });
 
 const Container = connect(mapStateToProps, mapDispatchToProps)(Component);

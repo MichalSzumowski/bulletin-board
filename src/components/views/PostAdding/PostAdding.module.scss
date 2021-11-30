@@ -1,0 +1,52 @@
+@import '../../../styles/settings.scss';
+
+.root {
+  padding: $base-size ($base-size * 3);
+    
+  h1 {
+    text-transform: uppercase;
+    color: $primary;
+    padding: $base-size;
+    text-align: center;
+    }
+  
+  .form {
+    margin: auto;
+    padding: $base-size ($base-size * 3);
+    max-width: 767px;
+    background: lighten($secondary, 80%);
+    border-radius: 5px;
+    box-shadow: 0 0 30px $grey;
+
+    .formDescription {
+      min-height: 250px;
+    }
+  
+    .formInput {
+      width: 100%;
+      margin: $base-size 0;
+      min-height: 55px;
+    }
+
+    .formUpload {
+      margin: $base-size 0;
+    }
+
+    .formSubmit {
+      height: 110px;
+    }
+
+    .formSubmit:hover,
+    .formUpload:hover {
+      background: $secondary;
+      color: $white;
+      transition: $transition;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .form {
+      max-width: 100%;
+    }
+  }
+}

@@ -1,4 +1,27 @@
 @import '../../../styles/settings.scss';
 
-// .root {
-// }
+.root {
+    padding: $base-size ($base-size * 3);
+    text-align: center;
+  
+    h1 {
+      text-transform: uppercase;
+      letter-spacing: 5px;
+      color: $primary;
+      margin: ($base-size * 2) 0;
+    }
+  
+    h2 {
+      display: inline-block;
+      margin: ($base-size * 2) 0;
+      padding: $base-size * 2;
+      background: lighten($primary, 50%);
+      border-radius: 5px;
+      text-decoration: none;
+  
+      &:hover {
+        color: $white;
+        transition: $transition;
+      }
+    }
+  }

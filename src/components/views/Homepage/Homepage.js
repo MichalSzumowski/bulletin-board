@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import clsx from 'clsx';
@@ -11,43 +11,43 @@ import styles from './Homepage.module.scss';
 import { PostShort } from '../PostShort/PostShort';
 import { Button, Link } from '@material-ui/core';
 
-const Component = ({ className, posts, userStatus }) => {
-
-  fetchPosts();
+const Component = ({ className, posts, userStatus, fetchPosts }) => {
+  
+  useEffect(() => {
+    fetchPosts();
+  }, [fetchPosts] );
 
   return (
     <div className={clsx(className, styles.root)}>
       <div className={styles.header}>
         <h1>Post Table</h1>
-        <div>
-          {userStatus === 'not-logged-in'
-            ? ''
-            : <Button
-              className={styles.button}
-              component={Link}
-              href='/post/add'
-              variant="outlined"
-              color="inherit"
-              size="large"
-            >
+        
+        {userStatus === 'not-logged-in'
+          ? ''
+          : <Button
+            className={styles.button}
+            component={Link}
+            href='/post/add'
+            variant="outlined"
+            color="inherit"
+            size="large"
+          >
           + Add new post
-            </Button>
-          }
-        </div>
+          </Button>
+        }
       </div>
     
-      {posts 
+      {posts
         .sort((a, b) => (
           new Date(b.updated) - new Date(a.updated)
         ))
         .map(post => (
-          console.log(posts),
-          <PostShort key={post.id} {...post} />
-        ))}
+          <PostShort key={post._id} {...post} />
+        ))
+      }
     </div>
   );
 };
-
 
 Component.propTypes = {
   posts: PropTypes.array,
@@ -62,11 +62,11 @@ const mapStateToProps = state => ({
   userStatus: getUserStatus(state),
 });
 
-// const mapDispatchToProps = dispatch => ({
-//   someAction: arg => dispatch(reduxActionCreator(arg)),
-// });
+const mapDispatchToProps = dispatch => ({
+  fetchPosts: () => dispatch(fetchPosts()),
+});
 
-const Container = connect(mapStateToProps)(Component);
+const Container = connect(mapStateToProps, mapDispatchToProps)(Component);
 
 export {
   Container as Homepage,

@@ -9,7 +9,7 @@ import { Button, Link } from '@material-ui/core';
 
 import styles from './PostLong.module.scss';
 
-const Component = ({ className, userStatus, userEmail, id, title, text, created, updated, email, status, image, price, phone, location }) => (
+const Component = ({ className, userStatus, userEmail, _id, title, text, created, updated, email, status, image, price, phone, location }) => (
   <div className={clsx(className, styles.root)}>
     <div className={styles.header}>
       <h1>{title}</h1>
@@ -18,7 +18,7 @@ const Component = ({ className, userStatus, userEmail, id, title, text, created,
         ? <Button
           className={styles.button}
           component={Link}
-          href={`/post/${id}/edit`}
+          href={`/post/${_id}/edit`}
           variant="outlined"
           color="inherit"
         >
@@ -65,7 +65,7 @@ Component.propTypes = {
   className: PropTypes.string,
   userStatus: PropTypes.string,
   userEmail: PropTypes.string,
-  id: PropTypes.string,
+  _id: PropTypes.string,
   title: PropTypes.string,
   text: PropTypes.string,
   created: PropTypes.string,
@@ -90,7 +90,6 @@ const mapStateToProps = state => ({
 const Container = connect(mapStateToProps)(Component);
 
 export {
-  // Component as PostLong,
   Container as PostLong,
   Component as PostLongComponent,
 }; 

@@ -34,8 +34,11 @@ const Component = ({ className, posts, userStatus, userEmail }) => (
 
         {posts
           .filter(post => post.email === userEmail)
+          .sort((a, b) => (
+            new Date(b.updated) - new Date(a.updated)
+          ))
           .map(post => (
-            <PostShort key={post.id} {...post} />
+            <PostShort key={post._id} {...post} />
           ))}
       </>
     }
@@ -54,10 +57,6 @@ const mapStateToProps = state => ({
   userStatus: getUserStatus(state),
   userEmail: getUserEmail(state),
 });
-
-// const mapDispatchToProps = dispatch => ({
-//   someAction: arg => dispatch(reduxActionCreator(arg)),
-// });
 
 const Container = connect(mapStateToProps)(Component);
 
