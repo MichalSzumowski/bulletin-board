@@ -9,7 +9,7 @@ import { addNewPost } from '../../../redux/postsRedux';
 
 import styles from './PostAdding.module.scss';
 import { TextField, FormControl, InputLabel, Select, MenuItem, Button } from '@material-ui/core';
-import { currentDate, randomId } from '../../../utils/utils';
+import { currentDate } from '../../../utils/utils';
 
 import { useHistory } from 'react-router-dom';
 
@@ -130,7 +130,7 @@ const Component = ({className, userEmail, addPost }) => {
         />
         <TextField
           id='post-phone'
-          type='tel'
+          type='number'
           className={styles.formInput}
           label='Phone'
           variant='outlined'
