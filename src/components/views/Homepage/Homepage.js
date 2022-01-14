@@ -19,6 +19,8 @@ const Component = ({ className, posts, userStatus, fetchPosts }) => {
     fetchPosts();
   }, [fetchPosts] );
 
+  console.log(posts);
+
   return (
     <div className={clsx(className, styles.root)}>
       <div className={styles.header}>

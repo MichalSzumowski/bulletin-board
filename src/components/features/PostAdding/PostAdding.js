@@ -187,7 +187,7 @@ const Component = ({ className, userEmail, addPost }) => {
         </label>
 
         <Button
-          className={styles.formInput + ' ' + styles.formSubmit}
+          className={styles.formButton + ' ' + styles.formSubmit}
           type='submit'
           variant='outlined'
           size='large'

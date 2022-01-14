@@ -30,9 +30,9 @@ const Component = ({ className, _id, title, image, price, lastUpdate }) => {
           }
         </div>
         <div className={styles.postInfo}>
-          <h2>{title}</h2>
-          <p>Last update: {lastUpdate}</p>
-          <h2>{price ? `${price} $` : ''}</h2>
+          <h2 className={styles.postTitle}>{title}</h2>
+          <p className={styles.postUpdate}>Last update: {lastUpdate}</p>
+          <h2 className={styles.postPrice}>{price ? `${price} $` : ''}</h2>
         </div>
       </Link>
     </div>

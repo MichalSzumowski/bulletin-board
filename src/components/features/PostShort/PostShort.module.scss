@@ -34,6 +34,15 @@
     position: relative;
   }
 
+  .postTitle {
+    width: 50%;
+  }
+
+  .postPrice, .postUpdate {
+    width: 25%;
+    text-align: center;
+  }
+
   &:hover {
     background: lighten($secondary, 50%);
     transition: $transition;

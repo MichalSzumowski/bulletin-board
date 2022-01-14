@@ -57,4 +57,32 @@ router.post('/posts', async (req, res) => {
   }
 });
 
+router.put('/posts/:id', async (req, res) => {
+  try {
+    const { title, content, date, lastUpdate, email, status, image, price, phone, city, imageName } = req.body;
+    
+    const result = await Post.findById(req.params.id);
+
+    if(result){
+      await result.updateOne({ _id: req.params.id }, { $set: { 
+        title: title,
+        content: content,
+        date: date,
+        lastUpdate: lastUpdate,
+        email: email,
+        status: status,
+        image: image,
+        price: price,
+        phone: phone,
+        city: city,
+        imageName: imageName,
+      }});
+      res.json(result, { message: 'OK' });
+    } else res.status(404).json({ message: 'Not found...' });
+  }
+  catch(err) {
+    res.status(500).json(err);
+  }
+});
+
 module.exports = router;

@@ -22,22 +22,18 @@
       min-height: 250px;
     }
   
-    .formInput {
+    .formInput,
+    .formButton {
       width: 100%;
       margin: $base-size 0;
       min-height: 55px;
-    }
-
-    .formUpload {
-      margin: $base-size 0;
     }
 
     .formSubmit {
       height: 110px;
     }
 
-    .formSubmit:hover,
-    .formUpload:hover {
+    .formButton:hover {
       background: $secondary;
       color: $white;
       transition: $transition;

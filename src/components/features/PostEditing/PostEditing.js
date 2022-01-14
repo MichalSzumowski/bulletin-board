@@ -120,21 +120,6 @@ const Component = ({ className, editPost, _id, title, content, date, lastUpdate,
           </Select>
         </FormControl>
 
-        <label htmlFor='post-image'>
-          <Button className={styles.formInput + ' ' + styles.formButton} variant='outlined' component='span'>
-            <input
-              accept='image/*'
-              id='post-image'
-              name='image'
-              type='file'
-              onChange={handleUpdatedPost}
-              hidden
-            />
-            {updatedPost.image ? `Uploaded: ${updatedPost.imageName}` : 'Upload image'}
-          </Button>
-          <img id='image-preview' className={styles.imagePreview} src='' alt='' />
-        </label>
-
         <FormControl className={styles.formInput} variant='outlined'>
           <InputLabel htmlFor='post-price'>Price</InputLabel>
           <OutlinedInput
@@ -181,8 +166,23 @@ const Component = ({ className, editPost, _id, title, content, date, lastUpdate,
           }}
         />
 
+        <label htmlFor='post-image'>
+          <Button className={styles.formInput + ' ' + styles.formButton} variant='outlined' component='span'>
+            <input
+              accept='image/*'
+              id='post-image'
+              name='image'
+              type='file'
+              onChange={handleUpdatedPost}
+              hidden
+            />
+            {updatedPost.image ? `Uploaded: ${updatedPost.imageName}` : 'Upload image'}
+          </Button>
+          <img id='image-preview' className={styles.imagePreview} src='' alt='' />
+        </label>
+
         <Button
-          className={styles.formInput + ' ' + styles.formSubmit}
+          className={styles.formButton + ' ' + styles.formSubmit}
           type='submit'
           variant='outlined'
           size='large'

@@ -43,19 +43,17 @@ export const fetchPosts = () => {
   };
 };
 
-export const fetchSinglePost = id => {
-  return (dispatch, getState) => {
-    dispatch(fetchStarted());
+export const fetchSinglePost = id => (dispatch, getState) => {
+  dispatch(fetchStarted());
 
-    Axios
-      .get(`http://localhost:8000/api/posts/${id}`)
-      .then(res => {
-        dispatch(fetchPostSuccess(res.data));
-      })
-      .catch(err => {
-        dispatch(fetchError(err.message || true));
-      });
-  };
+  Axios
+    .get(`http://localhost:8000/api/posts/${id}`)
+    .then(res => {
+      dispatch(fetchPostSuccess(res.data));
+    })
+    .catch(err => {
+      dispatch(fetchError(err.message || true));
+    });
 };
 
 export const addNewPost = newPost => {
@@ -65,6 +63,19 @@ export const addNewPost = newPost => {
       .post('http://localhost:8000/api/posts', newPost)
       .then(res => {
         dispatch(addPost(res.data));
+      })
+      .catch(err => {
+        dispatch(fetchError(err.message || true));
+      });
+  };
+};
+
+export const addEditedPost = editedPost => {
+  return (dispatch, getState) => {
+    Axios
+      .post('http://localhost:8000/api/posts', editedPost)
+      .then(res => {
+        dispatch(editPost(res.data));
       })
       .catch(err => {
         dispatch(fetchError(err.message || true));

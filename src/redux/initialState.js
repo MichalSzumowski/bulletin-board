@@ -1,4 +1,5 @@
 export const initialState = {
+  
   posts: {
     data: [],
     singlePost: {},
@@ -7,6 +8,7 @@ export const initialState = {
       error: false,
     },
   },
+  
   user: {
     status: 'logged-in',
     email: 'Michal@dev.pl',

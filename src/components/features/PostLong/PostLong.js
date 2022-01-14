@@ -11,9 +11,9 @@ import { Button, Link } from '@material-ui/core';
 import styles from './PostLong.module.scss';
 
 const Component = ({ className, userStatus, userEmail, _id, title, content, date, lastUpdate, email, status, image, price, phone, city }) => {
-
   return (
     <div className={clsx(className, styles.root)}>
+      {console.log( userStatus, userEmail)}
       <div className={styles.header}>
         <h1>{title}</h1>
 
